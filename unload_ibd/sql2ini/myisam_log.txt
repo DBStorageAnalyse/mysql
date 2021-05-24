@@ -1,0 +1,337 @@
+obdvin_log===========11个============================
+#  按优先级从前到后，依次降低
+
+CREATE TABLE `locus_for_app` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `tid` int(11) NOT NULL COMMENT '行程号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `longitude` varchar(50) NOT NULL COMMENT '经度',
+  `latitude` varchar(50) NOT NULL COMMENT '纬度',
+  `filter_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '50点筛点标志,1为选中的点',
+  `stop_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '停留点标志',
+  `speed_level` enum('5','4','3','2','1') DEFAULT '1' COMMENT '速度等级1-5',
+  `poi_name` varchar(200) DEFAULT NULL COMMENT '停留点名称',
+  `poi_address` varchar(250) DEFAULT NULL COMMENT '停留点地址',
+  `stop_time_len` int(10) DEFAULT NULL COMMENT '停留时长(秒)',
+  `create_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `obdct` (`tid`,`create_time`) USING HASH,
+  KEY `obdidx` (`obd_id`,`create_time`)
+) ENGINE=MyISAM AUTO_INCREMENT= DEFAULT CHARSET=utf8;
+
+CREATE TABLE `locus_score` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `score_date` datetime NOT NULL COMMENT '评分时间',
+  `score` int(10) NOT NULL COMMENT '评分0-100',
+  `level` int(10) DEFAULT NULL COMMENT '等级1-5',
+  `sort` int(10) DEFAULT NULL COMMENT '排名',
+  `avg_score` int(10) DEFAULT NULL COMMENT '历史平均评分',
+  `cid` int(11) DEFAULT '11' COMMENT '评语id',
+  `shid` int(10) DEFAULT '4' COMMENT '分享话术编号',
+  `locus_count` int(10) DEFAULT NULL COMMENT '当日行程数',
+  `locus_alltime` int(10) DEFAULT NULL COMMENT '当日行程总时长',
+  `locus_maxtime` int(10) DEFAULT NULL COMMENT '当日单次行程最大时长',
+  `mileage` float DEFAULT NULL COMMENT '里程数',
+  `maxspeed` int(10) DEFAULT NULL COMMENT '1天内最高速度',
+  `avgspeed` float DEFAULT NULL COMMENT '平均速度',
+  `highspeed_count` int(10) DEFAULT '0' COMMENT '超速次数',
+  `speed_up` int(10) DEFAULT NULL COMMENT '急加速',
+  `speed_down` int(10) DEFAULT NULL COMMENT '急减速',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`,`obd_id`,`score_date`),
+  UNIQUE KEY `kidx` (`obd_id`,`score_date`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=374527 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `locus_travel_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `tid` int(11) NOT NULL COMMENT '行程编号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `type` varchar(50) NOT NULL COMMENT '类别',
+  `value` int(11) NOT NULL COMMENT '数值',
+  `create_time` datetime NOT NULL COMMENT '发生时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `kidx` (`tid`,`obd_id`,`type`) USING HASH
+) ENGINE=MyISAM AUTO_INCREMENT=2411998 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `locus_all` (
+  `tid` int(11) NOT NULL,
+  `obd_id` varchar(50) NOT NULL,
+  `points` mediumtext,
+  `mileage` float DEFAULT '0',
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `up_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`tid`),
+  UNIQUE KEY `kidx` (`obd_id`,`start_time`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `locus_analyse_stop` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `tid` int(11) NOT NULL COMMENT '行程编号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `longitude` varchar(30) NOT NULL COMMENT '经度',
+  `latitude` varchar(30) NOT NULL DEFAULT '' COMMENT '纬度',
+  `stop_time` datetime NOT NULL COMMENT '开始停留时间',
+  `stop_len` int(11) NOT NULL COMMENT '停留时长',
+  `poi_name` varchar(80) NOT NULL COMMENT 'poi名称',
+  `poi_address` varchar(200) NOT NULL COMMENT '地址',
+  `cont` text COMMENT '查询',
+  `flag` int(10) DEFAULT '0' COMMENT '重复停留标记',
+  `weekend_flag` int(10) DEFAULT '0' COMMENT '周末停留标记',
+  `radius` int(10) DEFAULT '0' COMMENT '活动半径',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `kidx` (`obd_id`,`stop_time`) USING HASH
+) ENGINE=MyISAM AUTO_INCREMENT=2966616 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `locus_analyse_travel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `type` varchar(50) NOT NULL,
+  `start_point` varchar(100) NOT NULL COMMENT '起点经纬度',
+  `start_stop_id` int(11) NOT NULL,
+  `end_point` varchar(100) NOT NULL DEFAULT '' COMMENT '终点经纬度',
+  `end_stop_id` int(11) NOT NULL,
+  `travel_content` mediumtext COMMENT '里程',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `kidx` (`obd_id`,`type`)
+) ENGINE=MyISAM AUTO_INCREMENT=8061 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `locus_analyse_travel_road` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `tid` int(11) NOT NULL COMMENT '行程编号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `type` varchar(50) NOT NULL COMMENT '类型(h2c家-公司, c2h公司-家)',
+  `road` mediumtext NOT NULL COMMENT '路径详细描述',
+  `troad` text NOT NULL COMMENT '路径简略',
+  `mileage` text,
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tidx` (`obd_id`,`tid`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=633784 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `locus_car_score` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `score_date` datetime NOT NULL COMMENT '创建时间',
+  `score` int(10) NOT NULL COMMENT '得分',
+  `level` int(10) NOT NULL COMMENT '等级',
+  `cid` int(10) NOT NULL DEFAULT '5' COMMENT '评语编号',
+  `shid` int(10) NOT NULL DEFAULT '9' COMMENT '分享话术编号',
+  `description` text COMMENT '描述',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `kidx` (`obd_id`,`score_date`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=609652 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `locus_car_score_detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sid` int(11) NOT NULL COMMENT '评分编号',
+  `type` enum('COMPLEX','PID','DTC') NOT NULL COMMENT '类型',
+  `class` varchar(20) NOT NULL COMMENT '分类',
+  `extent` enum('严重','中等','一般','轻微') DEFAULT NULL COMMENT '严重程度',
+  `code` varchar(20) NOT NULL COMMENT '故障码',
+  `value` float(255,0) DEFAULT NULL COMMENT '值',
+  `descrption` varchar(250) DEFAULT NULL COMMENT '描述',
+  `subscore` int(10) DEFAULT NULL COMMENT '得分',
+  `suggest` varchar(250) DEFAULT NULL COMMENT '建议',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `评分编号` (`sid`)
+) ENGINE=MyISAM AUTO_INCREMENT=366672 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `locus_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `type` int(10) NOT NULL COMMENT '类型11-16驾驶评语，21-26车况评语',
+  `Comment` text NOT NULL COMMENT '评语',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `locus_dtc_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `code` varchar(20) NOT NULL,
+  `type` varchar(100) NOT NULL COMMENT '类型',
+  `level` varchar(30) NOT NULL COMMENT '等级',
+  `description` varchar(250) NOT NULL COMMENT '描述',
+  `aftermath` varchar(250) NOT NULL COMMENT '不处理的后果',
+  `remind` varchar(250) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1091 DEFAULT CHARSET=utf8;
+
+botaiapp=========4个=========================
+
+CREATE TABLE `t_vehicle_location` (
+  `eqid` char(16) NOT NULL COMMENT '设备id',
+  `uid` bigint(21) unsigned DEFAULT '0' COMMENT '用户id',
+  `longitude` float(8,5) DEFAULT NULL COMMENT '车辆位置经度',
+  `latitude` float(8,5) DEFAULT NULL COMMENT '车辆位置纬度',
+  `longitude_s` float(8,5) DEFAULT NULL COMMENT '车辆位置经度',
+  `latitude_s` float(8,5) DEFAULT NULL COMMENT '车辆位置纬度',
+  `speed` smallint(5) DEFAULT NULL COMMENT '车辆当前速度',
+  `telnum` smallint(5) DEFAULT NULL COMMENT '电话区号',
+  `province` char(32) DEFAULT NULL,
+  `city` char(32) DEFAULT NULL,
+  `district` char(32) DEFAULT NULL,
+  `districtcode` int(11) DEFAULT NULL,
+  `lt_time` int(11) unsigned DEFAULT '0',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`eqid`),
+  KEY `telnum` (`telnum`),
+  KEY `update_time` (`update_time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='车辆在线信息表';
+
+-- ----------------------------
+-- Table structure for t_violation
+-- ----------------------------
+DROP TABLE IF EXISTS `t_violation`;
+CREATE TABLE `t_violation` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(20) DEFAULT NULL,
+  `vin_code` varchar(255) DEFAULT NULL,
+  `date` varchar(30) DEFAULT NULL COMMENT '违章日期',
+  `area` varchar(100) DEFAULT NULL COMMENT '违章地点',
+  `act` varchar(300) DEFAULT NULL,
+  `code` varchar(20) DEFAULT NULL,
+  `fen` varchar(20) DEFAULT NULL,
+  `money` varchar(20) DEFAULT NULL,
+  `chuli` varchar(20) DEFAULT NULL COMMENT '处理结果',
+  `jiaokuan` varchar(20) DEFAULT NULL COMMENT '交款状态',
+  `last` varchar(30) DEFAULT NULL,
+  `create_time` varchar(30) DEFAULT NULL,
+  `city` varchar(20) DEFAULT NULL COMMENT '违章城市',
+  `car_id` int(20) DEFAULT NULL,
+  `longidedu` varchar(30) DEFAULT NULL,
+  `latitude` varchar(30) DEFAULT NULL,
+  `engine_code` varchar(20) DEFAULT NULL COMMENT '发动机号码',
+  `plate_num` varchar(20) DEFAULT NULL COMMENT '驾照号码',
+  `obd_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8589 DEFAULT CHARSET=utf8 COMMENT='违章信息表';
+
+CREATE TABLE `t_behaviour` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) DEFAULT NULL COMMENT '用户id',
+  `user_account` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `behaviour_type` varchar(255) DEFAULT NULL COMMENT '操作类型(登录login、绑定bind、解绑unbind)',
+  `user_type` varchar(255) DEFAULT NULL COMMENT '用户类型(普通用户0、后台用户1）',
+  `from` varchar(255) DEFAULT NULL COMMENT '操作来源',
+  `terminal` varchar(30) DEFAULT NULL COMMENT '终端类型（android,ios,web)',
+  `version` varchar(30) DEFAULT NULL COMMENT '终端版本号',
+  `create_time` datetime DEFAULT NULL,
+  `remark` varchar(50) DEFAULT NULL COMMENT '备注',
+  `ip` varchar(30) DEFAULT NULL COMMENT '终端标识',
+  `author` varchar(30) DEFAULT NULL COMMENT '操作员',
+  `createTime` datetime DEFAULT NULL,
+  `updateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=23539 DEFAULT CHARSET=utf8 COMMENT='用户行为表';
+
+CREATE TABLE `t_device_replace` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `old_obdid` varchar(50) DEFAULT NULL,
+  `old_imsi` varchar(50) DEFAULT NULL,
+  `new_obdid` varchar(50) DEFAULT NULL,
+  `new_imsi` varchar(50) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL COMMENT '操作类型(设备更换deviceRelace)',
+  `reason` varchar(500) DEFAULT NULL COMMENT '操作原因',
+  `author` varchar(30) DEFAULT NULL COMMENT '操作员',
+  `create_time` datetime DEFAULT NULL,
+  `remark` varchar(50) DEFAULT NULL COMMENT '备注',
+  `damage_name` varchar(50) DEFAULT NULL COMMENT '更换名称',
+  `damage_code` int(50) DEFAULT NULL COMMENT '更换代码',
+  `org_id` int(50) NOT NULL COMMENT '指向t_obd.id',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='设备更换历史表';
+
+
+obdvin_log_his ============3个============================
+
+CREATE TABLE `locus_for_app_resale` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `tid` int(11) NOT NULL COMMENT '行程号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `longitude` varchar(50) NOT NULL COMMENT '经度',
+  `latitude` varchar(50) NOT NULL COMMENT '纬度',
+  `filter_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '50点筛点标志,1为选中的点',
+  `stop_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '停留点标志',
+  `speed_level` enum('5','4','3','2','1') DEFAULT '1' COMMENT '速度等级1-5',
+  `poi_name` varchar(200) DEFAULT NULL COMMENT '停留点名称',
+  `poi_address` varchar(250) DEFAULT NULL COMMENT '停留点地址',
+  `stop_time_len` int(10) DEFAULT NULL COMMENT '停留时长(秒)',
+  `create_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `obdct` (`tid`,`create_time`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=187672684 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for locus_score_resale
+-- ----------------------------
+DROP TABLE IF EXISTS `locus_score_resale`;
+CREATE TABLE `locus_score_resale` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `score_date` datetime NOT NULL COMMENT '评分时间',
+  `score` int(10) NOT NULL COMMENT '评分0-100',
+  `level` int(10) DEFAULT NULL COMMENT '等级1-5',
+  `sort` int(10) DEFAULT NULL COMMENT '排名',
+  `avg_score` int(10) DEFAULT NULL COMMENT '历史平均评分',
+  `cid` int(11) DEFAULT '11' COMMENT '评语id',
+  `shid` int(10) DEFAULT '4' COMMENT '分享话术编号',
+  `locus_count` int(10) DEFAULT NULL COMMENT '当日行程数',
+  `locus_alltime` int(10) DEFAULT NULL COMMENT '当日行程总时长',
+  `locus_maxtime` int(10) DEFAULT NULL COMMENT '当日单次行程最大时长',
+  `mileage` float DEFAULT NULL COMMENT '里程数',
+  `maxspeed` int(10) DEFAULT NULL COMMENT '1天内最高速度',
+  `avgspeed` float DEFAULT NULL COMMENT '平均速度',
+  `highspeed_count` int(10) DEFAULT '0' COMMENT '超速次数',
+  `speed_up` int(10) DEFAULT NULL COMMENT '急加速',
+  `speed_down` int(10) DEFAULT NULL COMMENT '急减速',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`,`obd_id`,`score_date`)
+) ENGINE=MyISAM AUTO_INCREMENT=271032 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for locus_travel_resale
+-- ----------------------------
+DROP TABLE IF EXISTS `locus_travel_resale`;
+CREATE TABLE `locus_travel_resale` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '行程编号',
+  `vin` varchar(30) DEFAULT NULL COMMENT '车架号',
+  `obd_id` varchar(50) NOT NULL COMMENT 'obd号',
+  `start_id` int(11) NOT NULL COMMENT '开始序号',
+  `end_id` int(11) NOT NULL COMMENT '结束序号',
+  `start_time` datetime DEFAULT NULL COMMENT '开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  `score` int(10) DEFAULT '0' COMMENT '单次行程评分',
+  `cid` int(11) DEFAULT '11' COMMENT '评语编号',
+  `shid` int(11) DEFAULT '4' COMMENT '分享话术编号',
+  `mileage` float DEFAULT NULL COMMENT '里程',
+  `distance` float DEFAULT '0' COMMENT 'obd上传的里程',
+  `fuel` float DEFAULT '0' COMMENT '油耗',
+  `fuel_id` int(11) DEFAULT '0' COMMENT '状态编号',
+  `start_point` varchar(100) DEFAULT NULL COMMENT '开始点',
+  `end_point` varchar(100) DEFAULT NULL COMMENT '结束点',
+  `start_name` varchar(200) DEFAULT NULL COMMENT '开始点名称',
+  `end_name` varchar(200) DEFAULT NULL COMMENT '结束点名称',
+  `maxspeed` int(10) DEFAULT NULL COMMENT '单次行程最高速',
+  `avgspeed` float DEFAULT NULL COMMENT '平均速度',
+  `avgs_count` int(10) DEFAULT NULL COMMENT '平均个数',
+  `avgengine` int(10) DEFAULT NULL COMMENT '平均转数',
+  `lazy_count` int(10) DEFAULT NULL COMMENT '怠速次数',
+  `highspeed_count` int(10) DEFAULT '0' COMMENT '超速次数',
+  `speed_up` int(10) DEFAULT '0' COMMENT '急加速次数',
+  `speed_down` int(10) DEFAULT '0' COMMENT '急减速次数',
+  `flag` int(10) DEFAULT '0' COMMENT '数据处理标致',
+  `flag2` int(10) DEFAULT '0' COMMENT '停留处理标志',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1705933 DEFAULT CHARSET=utf8;
+
+

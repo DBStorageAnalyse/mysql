@@ -1,0 +1,339 @@
+CREATE TABLE `katt2_activelogs` (
+  `actid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `aid` mediumint(8) NOT NULL, 
+  `uid` mediumint(8) NOT NULL, 
+  `actuid` mediumint(8) NOT NULL, 
+  `setactive` tinyint(2) NOT NULL, 
+  `rate` tinyint(1) NOT NULL, 
+  `reaid` mediumint(8) NOT NULL DEFAULT '0', 
+  `filename` varchar(128) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `note` varchar(254) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`actid`),
+  KEY `aid` (`aid`,`uid`,`actuid`,`setactive`,`dateline`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_appealogs` (
+  `appid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `status` tinyint(1) NOT NULL DEFAULT '0', 
+  `appuid` mediumint(8) NOT NULL DEFAULT '0', 
+  `aid` mediumint(8) NOT NULL, 
+  `authoruid` mediumint(8) NOT NULL, 
+  `reason` text COLLATE `gbk_chinese_ci`, 
+  `arbitral` text COLLATE `gbk_chinese_ci`, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`appid`),
+  KEY `status` (`status`,`appuid`,`aid`,`authoruid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_business` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `uid` mediumint(8) NOT NULL, 
+  `status` tinyint(2) NOT NULL, 
+  `setid` mediumint(8) NOT NULL, 
+  `expire` int(10) NOT NULL, 
+  `name` varchar(32) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `mobile` varchar(11) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `email` varchar(128) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `company` varchar(256) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `meactive` tinyint(2) NOT NULL, 
+  `downloads` mediumint(8) NOT NULL, 
+  `accdowns` smallint(4) NOT NULL, 
+  `msgcount` smallint(3) NOT NULL DEFAULT '0', 
+  `msglastdate` int(10) NOT NULL DEFAULT '0', 
+  `setdate` int(10) NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  `note` text COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`),
+  KEY `status` (`status`,`setid`,`expire`,`meactive`,`downloads`,`accdowns`),
+  KEY `uid` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_buybusiness` (
+  `buyid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `kpayid` int(11) DEFAULT NULL, 
+  `uid` mediumint(8) NOT NULL, 
+  `buytype` tinyint(2) NOT NULL, 
+  `setid` mediumint(8) NOT NULL, 
+  `money` smallint(4) NOT NULL, 
+  `expire` int(10) NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`buyid`),
+  KEY `uid` (`uid`,`buytype`,`setid`),
+  KEY `kpayid` (`kpayid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_codelogs` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `code` char(32) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `downs` smallint(3) NOT NULL DEFAULT '0', 
+  `aid` mediumint(8) NOT NULL, 
+  `uid` mediumint(8) NOT NULL, 
+  `gettype` tinyint(1) NOT NULL, 
+  `getcon` varchar(256) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`),
+  UNIQUE KEY `code` (`code`),
+  KEY `downs` (`downs`,`aid`,`uid`,`gettype`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_collectlistes` (
+  `clistid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `uid` mediumint(8) NOT NULL, 
+  `hots` mediumint(8) NOT NULL DEFAULT '0', 
+  `clistcount` mediumint(8) NOT NULL DEFAULT '0', 
+  `clistname` varchar(254) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`clistid`),
+  KEY `uid` (`uid`,`hots`,`clistcount`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_collects` (
+  `colid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `uid` mediumint(8) NOT NULL, 
+  `clistid` mediumint(8) NOT NULL, 
+  `aid` mediumint(8) NOT NULL, 
+  `authoruid` mediumint(8) NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`colid`),
+  KEY `uid` (`uid`,`clistid`,`aid`,`authoruid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_contacts` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `top` mediumint(8) NOT NULL DEFAULT '0', 
+  `status` tinyint(1) NOT NULL DEFAULT '0', 
+  `uid` mediumint(8) NOT NULL, 
+  `title` varchar(128) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `note` text COLLATE `gbk_chinese_ci`, 
+  `mobile` varchar(15) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `email` varchar(128) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `qq` varchar(15) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `msn` varchar(128) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `name` varchar(15) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`),
+  KEY `top` (`top`,`status`,`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_dzswfups` (
+  `aid` mediumint(8) NOT NULL, 
+  `uid` mediumint(8) NOT NULL DEFAULT '0', 
+  `pid` mediumint(8) NOT NULL DEFAULT '0', 
+  `dateline` int(10) NOT NULL DEFAULT '0', 
+  PRIMARY KEY `PRIMARY` (`aid`),
+  KEY `uid` (`uid`,`pid`)
+) ENGINE=MEMORY DEFAULT CHARSET=latin1;
+
+CREATE TABLE `katt2_extcredits` (
+  `extid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `aid` mediumint(8) NOT NULL DEFAULT '0', 
+  `uid` mediumint(8) NOT NULL, 
+  `touid` mediumint(8) NOT NULL, 
+  `ctype` tinyint(2) NOT NULL, 
+  `extcredits` varchar(12) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `money` mediumint(5) NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`extid`),
+  KEY `uid` (`uid`,`dateline`),
+  KEY `touid` (`touid`,`ctype`,`extcredits`),
+  KEY `aid` (`aid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_globals` (
+  `id` smallint(4) NOT NULL AUTO_INCREMENT, 
+  `gtype` varchar(32) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `gvals` varchar(64) COLLATE `gbk_chinese_ci` NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`),
+  UNIQUE KEY `gtype` (`gtype`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_introaddeds` (
+  `ivtid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `aid` mediumint(8) NOT NULL, 
+  `uid` mediumint(8) NOT NULL, 
+  `top` tinyint(1) NOT NULL DEFAULT '0', 
+  `hots` mediumint(8) NOT NULL DEFAULT '0', 
+  `intro` text COLLATE `gbk_chinese_ci`, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`ivtid`),
+  KEY `aid` (`aid`,`uid`,`top`,`hots`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_mails` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, 
+  `status` tinyint(4) DEFAULT NULL, 
+  `totype` tinyint(4) DEFAULT NULL, 
+  `uid` int(11) DEFAULT NULL, 
+  `codelog_id` int(11) DEFAULT NULL, 
+  `aid` int(11) DEFAULT NULL, 
+  `code` varchar(32) COLLATE `latin1_swedish_ci` DEFAULT NULL, 
+  `tomail` varchar(256) COLLATE `latin1_swedish_ci` DEFAULT NULL, 
+  `created_at` datetime DEFAULT NULL, 
+  `updated_at` datetime DEFAULT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`),
+  KEY `index_katt2_mails_on_status_and_totype_and_uid` (`status`,`totype`,`uid`),
+  KEY `index_katt2_mails_on_codelog_id_and_aid` (`codelog_id`,`aid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `katt2_materials` (
+  `aid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `uid` mediumint(8) NOT NULL, 
+  `activate` tinyint(2) NOT NULL, 
+  `vip` tinyint(1) NOT NULL DEFAULT '0', 
+  `readperm` tinyint(2) NOT NULL, 
+  `price` tinyint(2) NOT NULL, 
+  `rate` tinyint(1) NOT NULL, 
+  `downloads` mediumint(8) NOT NULL, 
+  `star` tinyint(1) NOT NULL, 
+  `sortid` mediumint(8) NOT NULL, 
+  `localid` mediumint(8) NOT NULL, 
+  `tagids` varchar(250) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `tagnames` varchar(250) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `years` mediumint(4) NOT NULL, 
+  `pages` mediumint(5) NOT NULL, 
+  `title` varchar(250) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `purl` varchar(10) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `litpurl` varchar(10) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `wwwk` int(5) NOT NULL, 
+  `txt` int(5) NOT NULL, 
+  `intro` text COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `filetype` varchar(128) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `filext` varchar(10) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `filesize` int(11) NOT NULL, 
+  `attachment` varchar(250) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `dateline` int(10) NOT NULL, 
+  `introadded` tinyint(1) NOT NULL, 
+  `wincounts` tinyint(2) NOT NULL, 
+  `filemd5` varchar(32) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `swap` mediumint(8) DEFAULT NULL, 
+  PRIMARY KEY `PRIMARY` (`aid`),
+  KEY `years` (`years`,`pages`),
+  KEY `uid` (`uid`),
+  KEY `activate_rate` (`activate`,`rate`),
+  KEY `downs_star` (`downloads`,`star`),
+  KEY `sort_local` (`sortid`,`localid`),
+  KEY `dateline` (`dateline`),
+  KEY `filemd5` (`filemd5`),
+  KEY `tagid` (`tagids`),
+  KEY `vip` (`vip`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_matevips` (
+  `id` smallint(8) NOT NULL AUTO_INCREMENT, 
+  `status` tinyint(1) NOT NULL DEFAULT '1', 
+  `vtype` tinyint(1) NOT NULL DEFAULT '0', 
+  `aid` mediumint(8) NOT NULL DEFAULT '0', 
+  `uid` mediumint(8) NOT NULL DEFAULT '0', 
+  `year` tinyint(20) NOT NULL DEFAULT '0', 
+  `month` tinyint(2) NOT NULL DEFAULT '0', 
+  PRIMARY KEY `PRIMARY` (`id`),
+  KEY `matevips_ids` (`vtype`,`year`,`month`,`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_messages` (
+  `messid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `uid` mediumint(8) NOT NULL, 
+  `messtype` tinyint(2) NOT NULL, 
+  `status` tinyint(2) NOT NULL, 
+  `notes` text COLLATE `gbk_chinese_ci`, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`messid`),
+  KEY `uid` (`uid`,`messtype`,`status`,`dateline`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_remarks` (
+  `reid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `aid` mediumint(8) NOT NULL, 
+  `uid` mediumint(8) NOT NULL, 
+  `star` tinyint(1) NOT NULL DEFAULT '0', 
+  `notes` text COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `dateline` int(10) NOT NULL, 
+  `status` tinyint(1) NOT NULL DEFAULT '1', 
+  PRIMARY KEY `PRIMARY` (`reid`),
+  KEY `aid` (`aid`,`uid`,`star`,`dateline`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_setes` (
+  `setid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `status` tinyint(2) NOT NULL, 
+  `accday` smallint(3) NOT NULL, 
+  `accmax` smallint(5) NOT NULL, 
+  `sellday` smallint(3) NOT NULL, 
+  `sellprice` smallint(5) NOT NULL, 
+  `setname` varchar(32) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `setnotes` text COLLATE `gbk_chinese_ci`, 
+  `counts` mediumint(8) NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`setid`),
+  UNIQUE KEY `setname` (`setname`),
+  KEY `status` (`status`),
+  KEY `counts` (`counts`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_sortlocals` (
+  `slid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `sltype` tinyint(1) NOT NULL DEFAULT '1', 
+  `fromslid` smallint(8) NOT NULL DEFAULT '0', 
+  `subsorts` smallint(4) NOT NULL DEFAULT '0', 
+  `sltop` tinyint(3) NOT NULL DEFAULT '0', 
+  `materials` mediumint(8) NOT NULL DEFAULT '0', 
+  `slname` varchar(128) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `dateline` int(10) NOT NULL DEFAULT '0', 
+  PRIMARY KEY `PRIMARY` (`slid`),
+  KEY `sltype` (`sltype`,`fromslid`,`subsorts`,`sltop`,`materials`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_tags` (
+  `tagid` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `tagname` varchar(64) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `tagmd5` varchar(32) COLLATE `gbk_chinese_ci` NOT NULL, 
+  `agcount` mediumint(8) NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`tagid`),
+  UNIQUE KEY `tagmd5` (`tagmd5`),
+  KEY `agcount` (`agcount`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_todiscuzs` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT, 
+  `uid` mediumint(8) NOT NULL, 
+  `tid` mediumint(8) NOT NULL, 
+  `pid` mediumint(8) NOT NULL, 
+  `aid` mediumint(8) NOT NULL, 
+  `dateline` int(10) NOT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`),
+  KEY `pid` (`pid`,`aid`,`tid`),
+  KEY `uid` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_weixin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, 
+  `uid` int(11) DEFAULT NULL, 
+  `doc_id` int(11) DEFAULT NULL, 
+  `weixin_id` varchar(10) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `posttime` varchar(10) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  `rand_code` varchar(10) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `katt2_weixin_loaded` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT, 
+  `uid` int(11) DEFAULT NULL, 
+  `doc_id` int(11) DEFAULT NULL, 
+  `down_time` varchar(10) COLLATE `latin1_swedish_ci` DEFAULT NULL, 
+  PRIMARY KEY `PRIMARY` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `katt2_weixin_user` (
+  `uid` int(11) NOT NULL DEFAULT '0', 
+  `weixin_uid` varchar(40) COLLATE `gbk_chinese_ci` NOT NULL DEFAULT '0', 
+  `posttime` varchar(10) COLLATE `gbk_chinese_ci` DEFAULT NULL, 
+  UNIQUE KEY `uid` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) COLLATE `latin1_swedish_ci` NOT NULL, 
+  UNIQUE KEY `unique_schema_migrations` (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

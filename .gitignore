@@ -1,0 +1,7 @@
+__pycache__/
+.idea/
+*.zip
+*.tar
+*test/
+*bak/
+
