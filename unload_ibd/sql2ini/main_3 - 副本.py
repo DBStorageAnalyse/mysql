@@ -1,5 +1,6 @@
 # -*- coding: cp936 -*-
 __author__ = 'x'
+
 import re
 import ConfigParser
 import os
@@ -14,11 +15,11 @@ def save_table(table):
     conf.set('database', 'db_type', 30)
     # 写入表信息
     conf.add_section('table')
-    conf.set('table' , 'table_name', table.table_name)
-    conf.set('table' , 'table_type', table.table_type) #'table_%d' % table.num,
-    conf.set('table' , 'column_sum', table.column_sum)
-    conf.set('table' , 'nullmap_is', table.nullmap_is)
-    #写入列信息
+    conf.set('table', 'table_name', table.table_name)
+    conf.set('table', 'table_type', table.table_type)  # 'table_%d' % table.num,
+    conf.set('table', 'column_sum', table.column_sum)
+    conf.set('table', 'nullmap_is', table.nullmap_is)
+    # 写入列信息
     column_num = 0
     for column in table.columns:
         conf.add_section('column_%d' % column_num)
@@ -52,15 +53,15 @@ class Column:
         self.column_var_is = 1
         self.column_define = ''
         self.column_pkey_is = 0
-        self.column_nullable_is = 1    # 是否可以为空，1是0否
+        self.column_nullable_is = 1  # 是否可以为空，1是0否
         self.enums = list()
 
 
 class Table:
     def __init__(self, num, name):
-        self.num = num          # 表编号，从1开始
+        self.num = num  # 表编号，从1开始
         self.table_name = name
-        self.table_type = 1     # 暂时（2015年1月5日）只有这一个选项
+        self.table_type = 1  # 暂时（2015年1月5日）只有这一个选项
         self.columns = list()
 
     @property
@@ -101,9 +102,10 @@ def parse_nullable(column_stmt):
 
 
 def parse_len(type_name, column_stmt):
-    type_len = {'text': 0, 'mediumtext': 0, 'longtext': 0, 'date': 4, 'datetime': 5, 'timestamp': 4, 'smallint': 2, 'decimal': 10, 'int': 4, 'bigint': 8, 'float': 4, 'double': 8, 'enum': 4}
+    type_len = {'text': 0, 'mediumtext': 0, 'longtext': 0, 'date': 4, 'datetime': 5, 'timestamp': 4, 'smallint': 2,
+                'decimal': 10, 'int': 4, 'bigint': 8, 'float': 4, 'double': 8, 'enum': 4}
     if type_name in type_len:
-        return  type_len[type_name]
+        return type_len[type_name]
     else:
         return int(re.search(r'\w+\((\d+)\)', column_stmt).group(1))
 
@@ -111,6 +113,7 @@ def parse_len(type_name, column_stmt):
 def parse_enum(column_stmt):
     enums = re.search(r'enum\((.*?)\)', column_stmt).group()
     return re.findall(r'\'.*?\'', enums)
+
 
 # 从create语句中提取列信息
 def parse_create_stmt(create_stmt):
@@ -122,7 +125,7 @@ def parse_create_stmt(create_stmt):
         column.column_name = m.group(1)
         column.column_data_type = m.group(2)
         column.column_length = parse_len(m.group(2), m.group())
-        column.column_var_is = int(m.group(2) in ('varchar', 'char','text','mediumtext','longtext'))    # 变长类型
+        column.column_var_is = int(m.group(2) in ('varchar', 'char', 'text', 'mediumtext', 'longtext'))  # 变长类型
         column.column_define = parse_default_value(m.group())
         column.column_pkey_is = int(m.group(1) in pkeys)
         column.column_nullable_is = parse_nullable(m.group())

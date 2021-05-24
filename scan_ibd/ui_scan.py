@@ -321,7 +321,7 @@ class Ui_MainWindow(object):
             return
 
         logging.basicConfig(level=logging.DEBUG, format='%(message)s', filename='%s_%s.log' % (
-        self.db_name[:-3], time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))), filemode='w')
+            self.db_name[:-3], time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))), filemode='w')
         logging.info('file: %s' % self.f_name)
         logging.info('scan_db: %s' % self.db_name)
         self.tabWidget.setCurrentIndex(1)  # 切换到下一个标签页

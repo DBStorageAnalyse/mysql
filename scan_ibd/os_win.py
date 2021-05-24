@@ -81,17 +81,19 @@ class os_info():
                     partition1.device_id = physical_disk.DeviceID
                     partition1.partition_id = partition.Caption
                     partition1.partition_name = logical_disk.Caption
-                #    print(physical_disk.Caption, partition.Caption,logical_disk.Caption)
-                    for disk in c.Win32_LogicalDisk (DriveType=3):
-                        if disk.Caption == logical_disk.Caption:    #获取硬盘分区信息
+                    #    print(physical_disk.Caption, partition.Caption,logical_disk.Caption)
+                    for disk in c.Win32_LogicalDisk(DriveType=3):
+                        if disk.Caption == logical_disk.Caption:  # 获取硬盘分区信息
                             print("Caption: %s tatol: %0.1f G, free: %0.1f G, used_Per: %0.2f%% " %
-                            (disk.Caption,int(disk.Size)/1024.0/1024/1024, int(disk.FreeSpace)/1024.0/1024/1024,
-                            100.0 * (int(disk.Size)-int(disk.FreeSpace)) / int(disk.Size)))
+                                  (disk.Caption, int(disk.Size) / 1024.0 / 1024 / 1024,
+                                   int(disk.FreeSpace) / 1024.0 / 1024 / 1024,
+                                   100.0 * (int(disk.Size) - int(disk.FreeSpace)) / int(disk.Size)))
 
-                            partition1.partition_tatol = int(disk.Size)/1024.0/1024/1024
-                            partition1.partition_free = int(disk.FreeSpace)/1024.0/1024/1024
-                            partition1.partition_used = int(disk.Size)-int(disk.FreeSpace)/1024.0/1024/1024
-                            partition1.partition_used_Per = 100.0*(int(disk.Size)-int(disk.FreeSpace))/int(disk.Size)
+                            partition1.partition_tatol = int(disk.Size) / 1024.0 / 1024 / 1024
+                            partition1.partition_free = int(disk.FreeSpace) / 1024.0 / 1024 / 1024
+                            partition1.partition_used = int(disk.Size) - int(disk.FreeSpace) / 1024.0 / 1024 / 1024
+                            partition1.partition_used_Per = 100.0 * (int(disk.Size) - int(disk.FreeSpace)) / int(
+                                disk.Size)
                             disk1.partitions.append(partition1)
             disk_info.append(disk1)
         return disk_info

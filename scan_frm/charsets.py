@@ -8,6 +8,7 @@ SELECT CL.ID,CL.CHARACTER_SET_NAME,CL.COLLATION_NAME,CS.MAXLEN, CL.IS_DEFAULT FR
 WHERE CS.CHARACTER_SET_NAME=CL.CHARACTER_SET_NAME ORDER BY CHARACTER_SET_NAME
 """
 
+
 class CharsetInfo(object):
     """
     Read character set information for lookup. Methods include:
@@ -31,8 +32,8 @@ class CharsetInfo(object):
     def print_charsets(self):
         """Print the character set list
         """
-        print(self.format,self.charset_map)
-        print(len(self.charset_map)+"rows in set.")
+        print(self.format, self.charset_map)
+        print(len(self.charset_map) + "rows in set.")
 
     def get_name(self, chr_id):
         """Get the character set name for the given id
