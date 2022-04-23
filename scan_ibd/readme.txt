@@ -1,5 +1,5 @@
-﻿# -*- coding: utf-8 -*-
-mysql innodb 文件页面扫描/拼接
+﻿
+## mysql innodb 文件页面扫描/拼接
 
 innodb_scan.py  # 主文件
 innodb_check.py # 校验算法
