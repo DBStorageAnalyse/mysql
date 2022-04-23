@@ -103,8 +103,8 @@ class Scan_1(QThread):  # 类Scan_1继承自 QThread
                                 ii += page_size / scan_size
                                 cursor.execute("insert into innodb_page(offset,ts_no,page_no,page_type,pre_page,next_page,index_level,index_id,rec_sum) \
                                 values(?,?,?,?,?,?,?,?,?)", (
-                                offset, data2[9], data2[1], data2[7], data2[2], data2[3], index_level, index_id,
-                                rec_sum))
+                                    offset, data2[9], data2[1], data2[7], data2[2], data2[3], index_level, index_id,
+                                    rec_sum))
                                 if sum % 10000 == 0:
                                     conn.commit()  # 每10000条commit一次, 频繁提交会影响I/O速度
 
@@ -146,20 +146,20 @@ class Scan_1(QThread):  # 类Scan_1继承自 QThread
                                 ii += page_size / scan_size
                                 cursor.execute("insert into innodb_page(offset,ts_no,page_no,page_type,pre_page,next_page,index_level,index_id,rec_sum) \
                                 values(?,?,?,?,?,?,?,?,?)", (
-                                offset, data2[9], data2[1], data2[7], data2[2], data2[3], index_level, index_id,
-                                rec_sum))
+                                    offset, data2[9], data2[1], data2[7], data2[2], data2[3], index_level, index_id,
+                                    rec_sum))
 
             if i % (loop_1 // 1000 + 1) == 0 or i == loop_1:  # 输出扫描进度
                 progress = ((i + 1) / (loop_1 + 1)) * 100
                 now = time.time()
                 speed = i * 8 / (now - begin + 1)
                 print("Buf:%d/%d,Percent:%4.1f%%, Find:%d=%dM, I/O:%4.1fM/s,Time:%dMin\r" % (
-                i, loop_1, progress, sum, sum * page_size / 1024 / 1024, speed,
-                (loop_1 + 1 - i) * 8 / ((speed + 0.01) * 60)), end="")
+                    i, loop_1, progress, sum, sum * page_size / 1024 / 1024, speed,
+                    (loop_1 + 1 - i) * 8 / ((speed + 0.01) * 60)), end="")
                 self.PUP.emit(progress)  # 传递参数
                 self.LUP.emit(" Buf:%d/%d,Percent:%4.1f%%, Find:%d=%dM, I/O:%4.1fM/s,Time:%dMin" % (
-                i, loop_1, progress, sum, sum * page_size / 1024 / 1024, speed,
-                ((loop_1 + 1 - i) * 8 / ((speed + 0.01) * 60) + 1)))  # 传递参数
+                    i, loop_1, progress, sum, sum * page_size / 1024 / 1024, speed,
+                    ((loop_1 + 1 - i) * 8 / ((speed + 0.01) * 60) + 1)))  # 传递参数
 
         print("\n总页数: %d, 空页数: %d, 数据页: %d,文件头: %d" % (sum, page_0, page_17855, page_8))  # 总页数,空页数,数据页数
         logging.info("\n总页数: %d, 空页数: %d, 数据页: %d,文件头: %d" % (sum, page_0, page_17855, page_8))
@@ -173,6 +173,6 @@ class Scan_1(QThread):  # 类Scan_1继承自 QThread
               end='')  # 用时
         print(" ,f_size:%5.2fG ,I/O: %4.1fM/s" % (f_size / 1024 / 1024 / 1024, f_size / 1024 / 1024 / (end - begin)))
         logging.info("Datetime: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end)) + "\t 扫描完成,用时: %d:" % (
-                    (end - begin) // 3600) + time.strftime('%M:%S', time.localtime(end - begin)))
+                (end - begin) // 3600) + time.strftime('%M:%S', time.localtime(end - begin)))
         logging.info("File size:%6.2fG, 平均I/O:%4.1fM/s" % (
-        f_size / 1024 / 1024 / 1024, f_size / 1024 / 1024 / (end - begin + 1)))
+            f_size / 1024 / 1024 / 1024, f_size / 1024 / 1024 / (end - begin + 1)))

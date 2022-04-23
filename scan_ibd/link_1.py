@@ -63,7 +63,7 @@ def link_1(db_name):  # 数据库文件名称
             del aa_2
         #    拼碎片
         a = v_1[i].file_no == v_1[i + 1].file_no and (v_1[i + 1].offset - v_1[i].offset) / page_size == (
-                    v_1[i + 1].page_no - v_1[i].page_no) \
+                v_1[i + 1].page_no - v_1[i].page_no) \
             and (v_1[i + 1].page_no - v_1[i].page_no) <= 8
         if a == 1:
             if v_2[-1].page_sum == 1:

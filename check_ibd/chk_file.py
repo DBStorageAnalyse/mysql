@@ -125,7 +125,7 @@ class SCAN(threading.Thread):  # 类check继承自 QThread
                         self.err_pages.append(err_page)
         f.close()
         print("\nFile size:%6.2f G, I/O:%4.1f M/s\n" % (
-        f_size / 1024 / 1024 / 1024, f_size / 1024 / 1024 / (time.time() - begin)))  # I/O
+            f_size / 1024 / 1024 / 1024, f_size / 1024 / 1024 / (time.time() - begin)))  # I/O
 
     def get_return(self):
         return self.err_pages

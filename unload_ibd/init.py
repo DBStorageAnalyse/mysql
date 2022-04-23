@@ -163,7 +163,7 @@ def init_all(f, sys_tables, sys_columns, sys_indexes, sys_fields):
             #    print('tab_id:%d,tab_name:%s,col_sum:%d,index_id:%d,ts_no:%d,pgfirst:%d'%(obj_id,tab_name,tab.col_sum,tab.index_id,ts_no,tab.pgfirst))
             tab_all.append(tab)
             print('tab_id:%d,tab_name:%s.%s,col_sum:%d,index_id:%d,ts_no:%d,pgfirst:%d' % (
-            tab.tab_obj_id, db_name, tab.tab_name, tab.col_sum, tab.index_id, tab.ts_no, tab.pgfirst))
+                tab.tab_obj_id, db_name, tab.tab_name, tab.col_sum, tab.index_id, tab.ts_no, tab.pgfirst))
     news_ids = list(set(db_all))  # 去重
     news_ids.sort()
     db_all = news_ids
@@ -182,7 +182,7 @@ def tab_info(sys_columns, sys_indexes, sys_fields, obj_id, tab_name):
     for i2 in range(len(sys_indexes)):  # 获取索引信息，主键信息
         for ii2 in range(len(sys_indexes[i2].record)):
             if sys_indexes[i2].record[ii2].col_data1[0] == obj_id and sys_indexes[i2].record[ii2].col_data1[4] in (
-            1, 3):
+                    1, 3):
                 table1.pgfirst = sys_indexes[i2].record[ii2].col_data1[6]
                 table1.index_id = sys_indexes[i2].record[ii2].col_data1[1]
                 #    table1.index_col_sum = sys_indexes[i2].record[ii2].col_data1[3]
@@ -374,7 +374,7 @@ def save_data2(tab, tab_data, db):
                 if i2 == tab.col_sum - 1:
                     try:
                         if tab.col[i2].col_type in (
-                        'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
+                                'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
                                 tab_data[i].record[i1].col_data1[i2] != 'NULL':
                             if tab_data[i].record[i1].col_data1[i2] == '':
                                 ss += '\'\''
@@ -390,7 +390,7 @@ def save_data2(tab, tab_data, db):
                 else:
                     try:
                         if tab.col[i2].col_type in (
-                        'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
+                                'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
                                 tab_data[i].record[i1].col_data1[i2] != 'NULL':
                             if tab_data[i].record[i1].col_data1[i2] == '':
                                 ss += '\'\','
@@ -430,7 +430,7 @@ def save_data3(f1, tab, tab_data, db):
                 if i2 == tab.col_sum - 1:
                     try:
                         if tab.col[i2].col_type in (
-                        'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
+                                'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
                                 tab_data[i].record[i1].col_data1[i2] != 'NULL':
                             if tab_data[i].record[i1].col_data1[i2] == '':
                                 ss += '\'\''
@@ -446,7 +446,7 @@ def save_data3(f1, tab, tab_data, db):
                 else:
                     try:
                         if tab.col[i2].col_type in (
-                        'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
+                                'char', 'varchar', 'text', 'date', 'datetime', 'timestamp', 'blob') and \
                                 tab_data[i].record[i1].col_data1[i2] != 'NULL':
                             if tab_data[i].record[i1].col_data1[i2] == '':
                                 ss += '\'\','

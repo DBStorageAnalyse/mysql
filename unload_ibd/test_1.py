@@ -28,7 +28,7 @@ def page_link1(f, pgfirst):  # 文件，要解析的页链的起始页面号， 
         rec_sum += data7[0]
         if data4[0] == 4 and data5[0] == 0:  # obj_id,level
             print('page_no:%d,pre:%d,next:%d,ts_no:%d,obj_id:%d,level:%d,rec_sum0:%d,rec_sum1:%d,rec_sum:%d ' % (
-            next_page, data0[0], data2[0], data3[0], data4[0], data5[0], data6[0], data7[0], rec_sum))
+                next_page, data0[0], data2[0], data3[0], data4[0], data5[0], data6[0], data7[0], rec_sum))
             #  page1 = page.record(data1,table)  # 解析页面记录.  ***************
             f1.write(data)
         next_page += 1  # 下一页的页号

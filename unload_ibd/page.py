@@ -43,7 +43,7 @@ def rec_compact(f, in_data, table):  # 解析 compact 记录  in_data(输入页�
         page_1 = page1
         in_data1 = in_data
         print('talbe:%s,level:%s,page_no:%d,rec_sum:%d' % (
-        table.tab_name, page_1.page_level, page_1.page_no, page_1.rec_sum1))
+            table.tab_name, page_1.page_level, page_1.page_no, page_1.rec_sum1))
         for i in range(0, page_1.rec_sum1 + 2):  # 解记录
             record1 = table_struct.st_rec_compact()
             try:
@@ -84,7 +84,7 @@ def rec_compact(f, in_data, table):  # 解析 compact 记录  in_data(输入页�
                     col_data2 = data_type.data_type(col_data1, table.index_col[ii3])  # 列数据解析,
                 except UnboundLocalError:
                     print('UnboundLocalError:pg_no:%d,crd_no:%d,off:%d,col_no:%d,len:%d ' % (
-                    page1.page_no, i, off_set, ii3, len1))
+                        page1.page_no, i, off_set, ii3, len1))
                     col_data2 = ''
                 record1.col_data2.append(col_data2)
 
@@ -184,7 +184,7 @@ def rec_compact(f, in_data, table):  # 解析 compact 记录  in_data(输入页�
                             col_data2 = data_type.data_type(col_data1, table.col_1[ii3])  # 列数据解析,
                         except struct.error:
                             print('struct.error:pg_no:%d,crd_no:%d,off:%d,col_no:%d,len:%d ' % (
-                            page1.page_no, i, off_set, ii3, len1))
+                                page1.page_no, i, off_set, ii3, len1))
                             col_data2 = ''
 
                         # if table.col_1[ii3].col_name == 'picture':          # 取照片
@@ -247,7 +247,7 @@ def rec_compact(f, in_data, table):  # 解析 compact 记录  in_data(输入页�
                         col_data2 = data_type.data_type(col_data1, table.col_1[ii3])  # 列数据解析,
                     except (UnboundLocalError, struct.error) as e:
                         print('UnboundLocalError:pg_no:%d,crd_no:%d,off:%d,col_no:%d,len:%d ' % (
-                        page1.page_no, i, off_set, ii3, len1))
+                            page1.page_no, i, off_set, ii3, len1))
                         col_data2 = ''
 
                 record1.col_data2.append(col_data2)
@@ -320,7 +320,7 @@ def rec_redundant(f, in_data, table):  # 解析 redundant 记录,解析系统表
             table_name = record1.col_data2[0]
             if table.tab_obj_id == 1:
                 print('i:%d,off_set_now:%d,off_set_next:%d,table_name:%s,page_no:%d' % (
-                i, off_set_now, off_set, table_name, page_no_1))
+                    i, off_set_now, off_set, table_name, page_no_1))
             f.seek(page_no_1 * 16384)
             in_data = f.read(16384)
             page2 = rec_redundant(f, in_data, table)  # 解析level 0 的页面
@@ -374,5 +374,5 @@ def rec_redundant(f, in_data, table):  # 解析 redundant 记录,解析系统表
             off_set = record1.rec_h2  # 下一条记录的起始偏移
             if page1.page_no == 868382:
                 print('i:%d,off_set_now:%d,off_set_next:%d,table_name:%s,page_no:%d' % (
-                i, off_set_now, off_set, '', page1.page_no))
+                    i, off_set_now, off_set, '', page1.page_no))
         return page1

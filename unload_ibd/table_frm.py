@@ -97,8 +97,8 @@ def parse_create_stmt(create_stmt):
         column.data_type = m.group(2)
         column.column_len = parse_len(m.group(2), m.group())
         column.var_len_is = int(m.group(2) in (
-        'char', 'varchar', 'text', 'mediumtext', 'longtext', 'tinytext', 'longtblob', 'blob', 'mediumblob',
-        'tinyblob'))  # 变长类型
+            'char', 'varchar', 'text', 'mediumtext', 'longtext', 'tinytext', 'longtblob', 'blob', 'mediumblob',
+            'tinyblob'))  # 变长类型
         column.column_define = parse_default_value(m.group())
         column.pkey_is = int(m.group(1) in pkeys)
         if re.search("unsigned", m.group()):
